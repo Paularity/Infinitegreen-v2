@@ -2,6 +2,10 @@
 include 'header.php';
 ?>
 <?php 	
+	if(!isset($_SESSION['uid'])){
+		echo "<script> location.href='index.php'; </script>";
+	}
+
 	$id_type = "3";
     if(isset($_GET['id'])){
 		$user = $con->query("SELECT * FROM user_info where user_id =".$_GET['id']);
