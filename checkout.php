@@ -335,13 +335,13 @@ span.price {
                                 <span><img src="admin/assets/uploads/gcash.png" alt="gcash/logo"></span>
                                 <div class="gcash-info">
                                     <p>Amount Due <b style="margin-left: 5px;"
-                                            class="text-info">₱<?php echo $total; ?></b></p>
+                                            class="text-info">₱<?php echo $total * $quantity_; ?></b></p>
                                 </div>
                                 <p class="text-left" style="margin-bottom: 10px;"><b>Login to pay with GCash</b></p>
                                 <input type="tel" name="telphone" placeholder="Account Mobile Number"
                                      maxlength="11" title="11 digits code"
                                     required />
-									<input type="hidden" name="total" value="<?php echo $total; ?>" />
+									<input type="hidden" name="total" value="<?php echo $total * $quantity_; ?>" />
                                 <button type="submit">NEXT</button>
                             </form>
                         </div>
@@ -477,4 +477,3 @@ span.price {
 
 <?php
 include "footer.php";
-?>

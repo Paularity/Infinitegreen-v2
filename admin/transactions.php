@@ -32,14 +32,31 @@
                                     <th class="">Type</th>
                                     <th class="text-center">Action</th>
                                 </tr>
-                            </thead>                            
+                            </thead>
                             <tbody>
                                 <?php 
 								$i = 1;
 								$cat = array();
 								$cat[] = '';
-								$products = $conn->query("SELECT a.product_id, a.seller_id, a.product_image, a.product_title, a.product_price, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id");
+								$products = $conn->query("SELECT a.seller_id, a.product_image, a.product_title, a.product_price, b.user_id, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id");
+								$sales = $conn->query("SELECT SUM(a.product_price) as total_price, SUM(b.qty) as total_qty, a.product_id, a.seller_id, a.product_image, a.product_title, a.product_price, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id WHERE a.seller_id=".$_SESSION['login_id']);
                                 
+                                $total_qty = 0;
+                                $total_prices = 0;
+                                $total_sales = 0;
+
+                                while($r=$sales->fetch_assoc()):
+                                    $total_qty = $r['total_qty'];
+                                    $total_prices = $r['total_price'];
+                                endwhile;
+
+                                $total_sales = $total_qty * $total_prices;                                
+                                
+                                ?>
+                                <p class="alert alert-info"><b>Total Sales:</b>
+                                    ₱<?php echo number_format($total_sales,2) ?></p>
+                                <?php
+
 								while($row=$products->fetch_assoc()):
 									//TODO:
 									// $get = $conn->query("SELECT * FROM bids where product_id = {$row['id']}");
@@ -60,15 +77,19 @@
                                     <td class="">
                                         <p><small>Transaction ID: <b><?php echo $row['trx_id'] ?></b></small></p>
                                         <p><small>Quantity: <b><?php echo $row['qty'] ?></b></small></p>
-                                        <p><small>Each: <b><?php echo  number_format((float)($row['product_price']), 2, '.', '') ?></b></small></p>
-                                        <p><small>Total: <b>₱<?php echo  number_format((float)($row['product_price'] * $row['qty']), 2, '.', '') ?></b></small></p>
+                                        <p><small>Each:
+                                                <b><?php echo  number_format((float)($row['product_price']), 2, '.', '') ?></b></small>
+                                        </p>
+                                        <p><small>Total:
+                                                <b>₱<?php echo  number_format((float)($row['product_price'] * $row['qty']), 2, '.', '') ?></b></small>
+                                        </p>
                                     </td>
                                     <td class="text-center">
                                         <p><b><?php echo $row['p_type'] ?></b></p>
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary edit_product" type="button"
-                                            data-id="<?php echo $row['product_id'] ?>">View</button>
+                                        <button class="btn btn-sm btn-outline-primary view_user" type="button"
+                                            data-id="<?php echo $row['user_id'] ?>">View Buyer Info</button>
                                     </td>
                                 </tr>
                                 <?php endif; ?>
@@ -107,35 +128,9 @@ $(document).ready(function() {
     $('table').dataTable()
 })
 
-$('.view_product').click(function() {
-    uni_modal("product Details", "view_product.php?id=" + $(this).attr('data-id'), 'mid-large')
+$('.view_user').click(function() {
+    if ($(this).attr('data-id'))
+        uni_modal("<i class'fa fa-card-id'></i> Buyer Details", "view_udet.php?id=" + $(this).attr('data-id'))
 
 })
-$('.edit_product').click(function() {
-    location.href = "index.php?page=manage_product&id=" + $(this).attr('data-id')
-
-})
-$('.delete_product').click(function() {
-    _conf("Are you sure to delete this product?", "delete_product", [$(this).attr('data-id')])
-})
-
-function delete_product($product_id) {
-    start_load()
-    $.ajax({
-        url: 'ajax.php?action=delete_product',
-        method: 'POST',
-        data: {
-            product_id: $product_id
-        },
-        success: function(resp) {
-            if (resp == 1) {
-                alert_toast("Data successfully deleted", 'success')
-                setTimeout(function() {
-                    location.reload()
-                }, 1500)
-
-            }
-        }
-    })
-}
 </script>

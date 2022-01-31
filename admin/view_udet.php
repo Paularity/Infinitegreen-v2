@@ -1,7 +1,7 @@
 <?php include 'db_connect.php' ?>
 <?php
 if(isset($_GET['id'])){
-$qry = $conn->query("SELECT * FROM users where id= ".$_GET['id']);
+$qry = $conn->query("SELECT * FROM user_info where user_id= ".$_GET['id']);
 foreach($qry->fetch_array() as $k => $val){
 	$$k=$val;
 }
@@ -34,10 +34,10 @@ foreach($qry->fetch_array() as $k => $val){
 	<div class="col-lg-12">
 		<div class="row">
 			<div class="col-md-6">
-				<p>Name: <b><?php echo $name ?></b></p>
+				<p>Name: <b><?php echo $first_name . " " . $last_name ?></b></p>
 				<p>Email: <b><?php echo $email ?></b></p>
-				<p>Contact: <b><?php echo $contact ?></b></p>
-				<p>Address: <b><?php echo $address ?></b></p>
+				<p>Contact: <b><?php echo $mobile ?></b></p>
+				<p>Address: <b><?php echo $address1 ." ". $address2 ?></b></p>
 			</div>
 		</div>
 	</div>
