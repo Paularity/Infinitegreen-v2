@@ -375,6 +375,31 @@ $(document).ready(function(){
 			}
 		})
 	})
+	
+	$("body").delegate("#manage-profile","submit",function(event){
+		event.preventDefault();
+		// var msg = event.target[2].value;		
+		$.ajax({
+			url:'action.php?action=updateProfile',
+			method:'POST',
+			data: $("#manage-profile").serialize(),
+			success:function(resp){
+				if(resp == 1){
+					alert("Data successfully saved",'success')
+					setTimeout(function(){
+						location.reload()
+					},1500)
+				}
+				else{
+					console.log(resp);
+				}
+			}
+		})
+	})
+	
+	$("body").delegate("#profile","click",function(event){
+		location.href = 'manage_profile.php?id='+ $(this).attr('data-id');
+	})
 
 	function gcashPayment(){	 
 		$.ajax({

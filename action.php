@@ -641,6 +641,55 @@ if (isset($_POST["sendMessage"])) {
 	}
 }
 
+//Manage Profile
+if(isset($_GET['action']) && $_GET['action'] == 'updateProfile'){
+	extract($_POST);
+	$data = " last_name = '$last_name' ";
+	$data .= ", first_name = '$first_name' ";
+	$data .= ", mobile = '$mobile' ";
+	$data .= ", address1 = '$address1' ";
+	$data .= ", address2 = '$address2' ";
+	$data .= ", email = '$email' ";
+	if(!empty($password))
+	$data .= ", password = '".$password."' ";	
+	$sql = "UPDATE user_info set ".$data." where user_id = ".$user_id;
+	if($user_id){
+		if(mysqli_query($con,$sql)){
+			echo 1;
+			exit();
+		}
+	}
+	else{
+		echo "error";
+	}
+}
+
+// if(isset($_POST["updateProfile"])) {
+// 	$last_name = $_POST['data']['first_name'];
+
+// 	$data = " last_name = '$last_name' ";
+// 	$data .= ", first_name = '$first_name' ";
+// 	$data .= ", mobile = '$mobile' ";
+// 	$data .= ", address1 = '$address1' ";
+// 	$data .= ", address2 = '$address2' ";
+// 	$data .= ", email = '$email' ";
+// 	if(!empty($password))
+// 	$data .= ", password = '".md5($password)."' ";		
+// 	$chk = $this->db->query("Select * from user_info where email = '$email' and user_id !='$user_id' ")->num_rows;
+// 	if($chk > 0){
+// 		return 2;
+// 		exit;
+// 	}
+// 	if(empty($user_id)){
+// 		$save = $this->db->query("INSERT INTO user_info set ".$data);
+// 	}else{
+// 		$save = $this->db->query("UPDATE user_info set ".$data." where user_id = ".$user_id);
+// 	}
+// 	if($save){
+// 		return 1;
+// 	}
+// }
+
 
 
 

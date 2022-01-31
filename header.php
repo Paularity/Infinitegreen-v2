@@ -10,7 +10,7 @@ session_start();
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-		<title>Online Shopping</title>
+		<title>Infinitegreen: Store</title>
 
 		<!-- Google font -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -141,7 +141,7 @@ session_start();
                                <div class="dropdownn">
                                   <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> HI '.$row["first_name"].'</a>
                                   <div class="dropdownn-content" >
-                                    <a href="" data-toggle="modal" data-target="#profile"><i class="fa fa-user-circle" aria-hidden="true" ></i>My Profile</a>
+                                    <a href="javascript:void(0)" id="profile" data-id="'.$_SESSION['uid'].'"><i class="fa fa-user-circle" aria-hidden="true" ></i>My Profile</a>
                                     <a href="logout.php"  ><i class="fa fa-sign-in" aria-hidden="true"></i>Log out</a>
                                     
                                   </div>
