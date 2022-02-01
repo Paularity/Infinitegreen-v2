@@ -496,8 +496,8 @@ if (isset($_POST["checkoutGcash"])) {
 	// PAYMONGO API
 	$url = 'https://api.paymongo.com/v1/sources';
 	// changeable
-	$public_key = 'pk_test_dDMnoENhY29bNe44tEajyA8E';
-	$secret_key = 'sk_test_ZMMN26Bfi8f36XFZVRk6Q5Nr';
+	$public_key = 'pk_test_jnCvv3S3fxknkssw1uUwA2wR';
+	$secret_key = 'sk_test_JCWt7DwW54K4wSu3PvuUv7wS';
 
 	$data =[ "data" => [
 			"attributes" => [
@@ -552,8 +552,8 @@ if(isset($_POST['paymentGcash'])) {
 	$url = 'https://api.paymongo.com/v1/payments';
     // $data = array('key1' => 'value1', 'key2' => 'value2');
 
-    $public_key = 'pk_test_dDMnoENhY29bNe44tEajyA8E';
-    $secret_key = 'sk_test_ZMMN26Bfi8f36XFZVRk6Q5Nr';
+    $public_key = 'pk_test_jnCvv3S3fxknkssw1uUwA2wR';
+	$secret_key = 'sk_test_JCWt7DwW54K4wSu3PvuUv7wS';
 	$data =[ "data" => [
 			"attributes" => [
 				"amount" => (float)($_SESSION['current_product_price'])*100,
