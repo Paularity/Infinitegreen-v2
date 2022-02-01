@@ -285,7 +285,7 @@ span.price {
 
 						$sqlOrders = "INSERT INTO `orders`
 							(`product_id`, `seller_id`, `user_id`, `qty`, `trx_id`, `p_status`, `p_type`) 
-							VALUES ('$product_id', '$seller_id', '$card_user_id', '$quantity_', '$trx_id', 'Completed', 'card')";
+							VALUES ('$product_id', '$seller_id', '$card_user_id', '$quantity_', '$trx_id', 'Pending', 'card')";
 							mysqli_query($con,$sqlOrders);
 						$i++;
 					}					
@@ -370,7 +370,7 @@ span.price {
 				";
 
 				$cod_user_id = $_SESSION['uid'];
-				$p_status = "Completed";				
+				$p_status = "Pending";				
 
 				$sqlOrders = "INSERT INTO `orders`
 					(`product_id`, `seller_id`, `user_id`, `qty`, `trx_id`, `p_status`, `p_type`) 
@@ -382,7 +382,7 @@ span.price {
             $user_id = $_SESSION['uid'];
             $address = $_SESSION['address'];
             $account_name = $_SESSION['fullname'];
-			$p_status = "Completed";
+			$p_status = "Pending";
 
             $sql = "INSERT INTO `order_info_cod`
             (`order_id`, `user_id`, `address`, `total_amt`, `trx_id`) 

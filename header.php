@@ -31,6 +31,8 @@ session_start();
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="css/style.css"/>
 		<link type="text/css" rel="stylesheet" href="css/accountbtn.css"/>
+		<link href="admin/assets/DataTables/datatables.min.css" rel="stylesheet">
+		<script src="admin/assets/DataTables/datatables.min.js"></script>
 		
 		
 		
@@ -140,8 +142,9 @@ session_start();
                                 echo '
                                <div class="dropdownn">
                                   <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> HI '.$row["first_name"].'</a>
-                                  <div class="dropdownn-content" >
+                                  <div class="dropdownn-content" style="z-index: 100;">
                                     <a href="javascript:void(0)" id="profile" data-id="'.$_SESSION['uid'].'"><i class="fa fa-user-circle" aria-hidden="true" ></i>My Profile</a>
+                                    <a href="orders.php"  ><i class="fa fa-truck" aria-hidden="true"></i>My Orders</a>
                                     <a href="logout.php"  ><i class="fa fa-sign-in" aria-hidden="true"></i>Log out</a>
                                     
                                   </div>

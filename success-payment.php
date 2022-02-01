@@ -59,7 +59,7 @@ if(isset($_SESSION['current_gcash_source_id'])){
 
             $sqlOrders = "INSERT INTO `orders`
             (`product_id`, `seller_id`, `user_id`, `qty`, `trx_id`, `p_status`, `p_type`) 
-            VALUES ('$product_id', '$seller_id', '$user_id', '$qty', '$paymongoPaymentId', 'Completed', 'gcash')";
+            VALUES ('$product_id', '$seller_id', '$user_id', '$qty', '$paymongoPaymentId', 'Pending', 'gcash')";
             if(mysqli_query($con,$sqlOrders)){
                 unset($_SESSION['gcash_seller_id']);
                 unset($_SESSION['gcash_product_id']);

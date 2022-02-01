@@ -56,7 +56,7 @@
 		<script src="js/main.js"></script>
 		<script src="js/actions.js"></script>
 		<script src="js/sweetalert.min"></script>
-		<script src="js/jquery.payform.min.js" charset="utf-8"></script>
+		<script src="js/jquery.payform.min.js" charset="utf-8"></script>		
     <script src="js/script.js"></script>
 		<script>var c = 0;
         function menu(){

@@ -9,8 +9,6 @@
             </div>
         </div>
         <div class="row">
-            <!-- FORM Panel -->
-
             <!-- Table Panel -->
             <div class="col-md-12">
                 <div class="card">
@@ -30,6 +28,7 @@
                                     <th class="">Product Name</th>
                                     <th class="">Other Info</th>
                                     <th class="">Type</th>
+                                    <th class="">Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -38,23 +37,18 @@
 								$i = 1;
 								$cat = array();
 								$cat[] = '';
-								$products = $conn->query("SELECT a.seller_id, a.product_image, a.product_title, a.product_price, b.user_id, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id");
-								$sales = $conn->query("SELECT SUM(a.product_price) as total_price, SUM(b.qty) as total_qty, a.product_id, a.seller_id, a.product_image, a.product_title, a.product_price, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id WHERE a.seller_id=".$_SESSION['login_id']);
+								$products = $conn->query("SELECT a.seller_id, a.product_image, a.product_title, a.product_price, b.order_id, b.user_id, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `orders` as b LEFT JOIN `products` as a ON a.product_id = b.product_id ORDER BY b.date_created DESC");
+								$sales = $conn->query("SELECT a.product_price, b.qty FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id WHERE a.seller_id=".$_SESSION['login_id']);
                                 
-                                $total_qty = 0;
                                 $total_prices = 0;
-                                $total_sales = 0;
 
                                 while($r=$sales->fetch_assoc()):
-                                    $total_qty = $r['total_qty'];
-                                    $total_prices = $r['total_price'];
-                                endwhile;
-
-                                $total_sales = $total_qty * $total_prices;                                
+                                    $total_prices += ($r['product_price'] * $r['qty']);                                    
+                                endwhile;                              
                                 
                                 ?>
                                 <p class="alert alert-info"><b>Total Sales:</b>
-                                    ₱<?php echo number_format($total_sales,2) ?></p>
+                                    ₱<?php echo number_format(($total_prices),2) ?></p>
                                 <?php
 
 								while($row=$products->fetch_assoc()):
@@ -76,6 +70,7 @@
                                     </td>
                                     <td class="">
                                         <p><small>Transaction ID: <b><?php echo $row['trx_id'] ?></b></small></p>
+                                        <p><small>Transaction Date: <b><?php echo $row['date_created'] ?></b></small></p>
                                         <p><small>Quantity: <b><?php echo $row['qty'] ?></b></small></p>
                                         <p><small>Each:
                                                 <b><?php echo  number_format((float)($row['product_price']), 2, '.', '') ?></b></small>
@@ -88,8 +83,21 @@
                                         <p><b><?php echo $row['p_type'] ?></b></p>
                                     </td>
                                     <td class="text-center">
+                                        <?php if ($row['p_status'] == 'Pending'): ?>
+                                            <p style="color: #ffc107; font-weight: bold;">Pending</p>
+                                        <?php endif; ?>
+                                        <?php if ($row['p_status'] == 'Shipped'): ?>
+                                            <p style="color: #007bff; font-weight: bold;">Shipped</p>
+                                        <?php endif; ?>
+                                        <?php if ($row['p_status'] == 'Completed'): ?>
+                                            <p style="color: #28a745; font-weight: bold;">Completed</p>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center">
                                         <button class="btn btn-sm btn-outline-primary view_user" type="button"
                                             data-id="<?php echo $row['user_id'] ?>">View Buyer Info</button>
+                                            <button class="btn btn-sm btn-outline-info edit_status" type="button"
+                                            data-id="<?php echo $row['order_id'] ?>">Edit Status</button>
                                     </td>
                                 </tr>
                                 <?php endif; ?>
@@ -131,6 +139,9 @@ $(document).ready(function() {
 $('.view_user').click(function() {
     if ($(this).attr('data-id'))
         uni_modal("<i class'fa fa-card-id'></i> Buyer Details", "view_udet.php?id=" + $(this).attr('data-id'))
-
+})
+$('.edit_status').click(function() {
+    if ($(this).attr('data-id'))
+        uni_modal("<i class'fa fa-card-id'></i> Update Status", "edit_order_status.php?id=" + $(this).attr('data-id'))
 })
 </script>

@@ -435,4 +435,15 @@ Class Action {
 		if($save)
 			return 1;		
 	}
+	
+	function update_order_status(){
+		extract($_POST);
+		if(empty($order_id)){
+			return 2;
+		}else{
+			$save = $this->db->query("UPDATE orders SET p_status = '".$p_status."' WHERE order_id=".$order_id);
+		}
+		if($save)
+			return 1;
+	}
 }
