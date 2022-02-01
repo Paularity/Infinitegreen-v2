@@ -172,24 +172,21 @@ Class Action {
 
 		$data = " name = '$name' ";
 		$data .= ", username = '$username' ";
+		$data .= ", email = '$email' ";
+		$data .= ", contact = '$contact' ";
+		$data .= ", address = '$address' ";
 		if(!empty($password))
 		$data .= ", password = '".md5($password)."' ";
 		$data .= ", type = '$type' ";
-		if($type == 1)
-			$establishment_id = 0;
-		$chk = $this->db->query("Select * from users where username = '$username' and id !='$id' ")->num_rows;
-		if($chk > 0){
-			return 2;
-			exit;
-		}
 		if(empty($id)){
 			$save = $this->db->query("INSERT INTO users set ".$data);
-		}else{
-			$save = $this->db->query("UPDATE users set ".$data." where id = ".$id);
 		}
 		if($save){
 			return 1;
+			exit();
 		}
+		return 2;
+		exit();
 	}	
 
 	function delete_seller(){

@@ -59,7 +59,7 @@ $('#signup-frm').submit(function(e) {
     if ($(this).find('.alert-danger').length > 0)
         $(this).find('.alert-danger').remove();
     $.ajax({
-        url: 'admin/ajax.php?action=signup',
+        url: 'admin/ajax.php?action=save_seller',
         method: 'POST',
         data: $(this).serialize(),
         error: err => {
@@ -69,10 +69,10 @@ $('#signup-frm').submit(function(e) {
         },
         success: function(resp) {
             if (resp == 1) {
-                location.href = "index.php"
+                location.href = "admin/index.php"
             } else {
                 $('#signup-frm').prepend(
-                    '<div class="alert alert-danger">Email already exist.</div>')
+                    '<div class="alert alert-danger">Please validate your inputs.</div>')
                 // end_load();
             }
         }

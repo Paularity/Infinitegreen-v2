@@ -128,20 +128,10 @@ include "header.php";
 						<div class="product-details">
 							<h2 class="product-name">'.$row['product_title'].'</h2>
 							<div>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
-								<a class="review-link" href="#review-form">10 Review(s) | Add your review</a>
-							</div>
-							<div>
-								<h3 class="product-price">$'.$row['product_price'].'<del class="product-old-price">₱'.$row['product_price']*1.3.'</del></h3>
+								<h3 class="product-price">₱'.$row['product_price'].'<del class="product-old-price">₱'.$row['product_price']*1.3.'</del></h3>
 								<span class="product-available">In Stock</span>
 							</div>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+							<p>'.$row['product_desc'].'</p>
 
 							<div class="add-to-cart">
 								<div class="btn-group" style="margin-left: 25px; margin-top: 15px">
@@ -170,7 +160,7 @@ include "header.php";
 					<div class="col-md-12">
 						<div id="product-tab">
 							<!-- product tab nav -->
-							<ul class="tab-nav">
+							<ul class="tab-nav" style="display: none;">
 								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
 								<li><a data-toggle="tab" href="#tab2">Details</a></li>
 								<li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
@@ -179,21 +169,11 @@ include "header.php";
 
 							<!-- product tab content -->
 							<div class="tab-content">
-								<!-- tab1  -->
-								<div id="tab1" class="tab-pane fade in active">
-									<div class="row">
-										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-										</div>
-									</div>
-								</div>
-								<!-- /tab1  -->
-
 								<!-- tab2  -->
 								<div id="tab2" class="tab-pane fade in">
 									<div class="row">
 										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+											<p>'.$row['product_desc'].'</p>
 										</div>
 									</div>
 								</div>
@@ -219,9 +199,7 @@ include "header.php";
 																<i class="fa fa-star-o empty"></i>
 															</div>
 														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
+													
 													</li>
 													<li>
 														<div class="review-heading">
@@ -235,9 +213,7 @@ include "header.php";
 																<i class="fa fa-star-o empty"></i>
 															</div>
 														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
+														
 													</li>
 													<li>
 														<div class="review-heading">

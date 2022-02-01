@@ -76,14 +76,7 @@ include 'header.php';
 						<!-- /aside Widget -->
 
 						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Top selling</h3>
-							<div id="get_product_home">
-								<!-- product widget -->
-								
-								<!-- product widget -->
-							</div>
-						</div>
+						
 						<!-- /aside Widget -->
 					</div>
 					<!-- /ASIDE -->
