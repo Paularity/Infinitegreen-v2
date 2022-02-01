@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2022 at 09:52 PM
+-- Generation Time: Feb 01, 2022 at 12:47 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -118,16 +118,6 @@ CREATE TABLE `chatlog` (
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `chatlog`
---
-
-INSERT INTO `chatlog` (`id`, `sender_id`, `receiver_id`, `message`, `date_created`) VALUES
-(58, 1, 7, 'seller one are you there? this is admin', '2022-01-30 15:04:39'),
-(59, 7, 1, 'yes I am here, seller01 here', '2022-01-30 15:05:04'),
-(60, 47, 1, 'asdasd', '2022-01-30 21:56:53'),
-(61, 47, 1, 'Can you anwser me?', '2022-01-30 21:57:22');
-
 -- --------------------------------------------------------
 
 --
@@ -144,9 +134,7 @@ CREATE TABLE `email_info` (
 --
 
 INSERT INTO `email_info` (`email_id`, `email`) VALUES
-(3, 'admin@gmail.com'),
-(4, 'puneethreddy951@gmail.com'),
-(5, 'puneethreddy@gmail.com');
+(3, 'admin@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -179,18 +167,6 @@ CREATE TABLE `orders` (
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`order_id`, `seller_id`, `user_id`, `product_id`, `qty`, `trx_id`, `p_status`, `p_type`, `date_created`) VALUES
-(30, 7, 46, 106, 1, 'AEC5EC77-04BD-4F3A-974E-2B8718F38D70', 'Completed', 'cod', '2022-02-01 00:08:51'),
-(31, 7, 46, 106, 3, '8A177457-C9C4-46C7-8656-50F33A5EC617', 'Completed', 'cod', '2022-02-01 00:15:54'),
-(39, 7, 46, 106, 12, '7B97C731-6207-45D9-9A60-AC07257FF38C', 'Completed', 'card', '2022-02-01 00:47:24'),
-(40, 10, 46, 107, 3, 'A35D3E4C-F615-46FC-B644-396AD1B39539', 'Completed', 'cod', '2022-02-01 01:18:42'),
-(41, 7, 46, 106, 2, 'A35D3E4C-F615-46FC-B644-396AD1B39539', 'Completed', 'cod', '2022-02-01 01:18:42'),
-(42, 7, 46, 106, 8, 'pay_NACZCEtgQppsFPYJA5dLaQfE', 'Completed', 'gcash', '2022-02-01 02:08:53');
-
 -- --------------------------------------------------------
 
 --
@@ -215,13 +191,6 @@ CREATE TABLE `orders_info_card` (
   `cvv` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `orders_info_card`
---
-
-INSERT INTO `orders_info_card` (`order_id`, `trx_id`, `user_id`, `f_name`, `email`, `address`, `city`, `state`, `zip`, `cardname`, `cardnumber`, `expdate`, `prod_count`, `total_amt`, `cvv`) VALUES
-(1, '', 46, 'Florence Pamintuan', 'user02@gmail.com', 'Pampang', 'Angeles City', 'Pampanga', 2009, 'Andres ', '1111111111111111', '12/26', 1, 599, 251);
-
 -- --------------------------------------------------------
 
 --
@@ -235,18 +204,6 @@ CREATE TABLE `order_info_cod` (
   `total_amt` int(11) NOT NULL,
   `trx_id` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `order_info_cod`
---
-
-INSERT INTO `order_info_cod` (`order_id`, `user_id`, `address`, `total_amt`, `trx_id`) VALUES
-(8, 46, 'Pampang, Angeles Cit', 599, '8A177457-C9C4-46C7-8656-50F33A5EC617'),
-(1693929, 46, 'Pampang, Angeles Cit', 1220, '1693929B-928E-474F-9F4E-A4EE91350B57'),
-(1693930, 46, 'Pampang, Angeles Cit', 1220, 'D8CA7E6A-2995-4348-B252-8E7C8530990A'),
-(1693931, 46, 'Pampang, Angeles Cit', 599, 'E98ED8C6-CEC0-4F77-972E-F0E2369F4BB6'),
-(1693932, 46, 'Pampang, Angeles Cit', 599, 'AEC5EC77-04BD-4F3A-974E-2B8718F38D70'),
-(1693933, 46, 'Pampang, Angeles Cit', 1498, 'A35D3E4C-F615-46FC-B644-396AD1B39539');
 
 -- --------------------------------------------------------
 
@@ -265,14 +222,6 @@ CREATE TABLE `order_info_gcash` (
   `total_amt` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `order_info_gcash`
---
-
-INSERT INTO `order_info_gcash` (`id`, `order_id`, `trx_id`, `user_id`, `address`, `account_name`, `account_number`, `total_amt`) VALUES
-(6, 'pay_hqqykk3T2mufgUxpQfrWNP6a', '', 46, 'Pampang, Angeles Cit', 'Florence Pamintuan', 2147483647, 599),
-(7, 'pay_NACZCEtgQppsFPYJA5dLaQfE', '', 46, 'Pampang, Angeles Cit', 'Florence Pamintuan', 2147483647, 11984);
-
 -- --------------------------------------------------------
 
 --
@@ -286,13 +235,6 @@ CREATE TABLE `order_products` (
   `qty` int(15) DEFAULT NULL,
   `amt` int(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `order_products`
---
-
-INSERT INTO `order_products` (`order_pro_id`, `order_id`, `product_id`, `qty`, `amt`) VALUES
-(104, 1, 106, 12, 7188);
 
 -- --------------------------------------------------------
 
@@ -311,14 +253,6 @@ CREATE TABLE `products` (
   `product_image` text NOT NULL,
   `product_keywords` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`product_id`, `seller_id`, `product_cat`, `product_brand`, `product_title`, `product_price`, `product_desc`, `product_image`, `product_keywords`) VALUES
-(106, 7, 1, 8, 'Malunggay[ EXCLUSIVE OFFER ]', 599, 'asd asd asd', '106.jpg', ''),
-(107, 10, 1, 8, 'Oregano', 899, 'a', '107.PNG', '');
 
 -- --------------------------------------------------------
 
@@ -365,15 +299,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `email`, `contact`, `address`, `type`, `date_created`) VALUES
-(1, 'Administrator', 'admin', '0192023a7bbd73250516f069df18b500', 'admin@admin.com', '+123456789', '', 1, '2020-10-27 09:19:59'),
-(5, 'John Smith', 'jsmith', '1254737c076cf867dc53d60a0364f38e', 'jsmith@sample.com', '+18456-5455-55', 'Sample', 2, '2020-10-27 14:18:32'),
-(7, 'Bjay112', 'seller01', '95abc042bcdf3a5054627d31153bbd1c', '', '', '', 0, '2022-01-26 22:24:21'),
-(10, 'Boni', 'seller02', '917c1b615ff7da73cb2fffa987bc9554', '', '', '', 2, '2022-01-27 00:20:50'),
-(14, 'Christian Paul', 'seller03', '153ded82fa3db5c91237d579309367f7', '', '', '', 2, '2022-01-29 13:14:00'),
-(15, 'John Doe', 'admin02', '6e60a28384bc05fa5b33cc579d040c56', '', '', '', 1, '2022-01-29 13:14:27'),
-(16, 'Christian Paul', 'seller06', 'e0dd4964448f045b7b2f487d8361ad89', 'christiandecembrana1@gmail.com', '09560585678', 'Santa teresita', 3, '2022-01-30 02:56:56'),
-(17, 'Florence Pamintuan', 'seller002', '917c1b615ff7da73cb2fffa987bc9554', 'seller1002@gmail.com', '09560585678', 'Pampang', 3, '2022-01-30 15:06:18'),
-(18, '', '', '', '', '', '', 0, '2022-01-31 18:43:36');
+(1, 'Administrator', 'admin', '0192023a7bbd73250516f069df18b500', 'admin@admin.com', '+123456789', '', 1, '2020-10-27 09:19:59');
 
 -- --------------------------------------------------------
 
@@ -391,15 +317,6 @@ CREATE TABLE `user_info` (
   `address1` varchar(300) NOT NULL,
   `address2` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_info`
---
-
-INSERT INTO `user_info` (`user_id`, `first_name`, `last_name`, `email`, `password`, `mobile`, `address1`, `address2`) VALUES
-(44, 'Christian', 'Decembrana', 'christiandecembrana1@gmail.com', 'b75705d7e35e7014521a46b532236ec3', '9999992', 'Angeles City', 'Pampanga'),
-(46, 'Florence', 'Pamintuan', 'user02@gmail.com', 'testtest@SM123', '9999999999', '405 Pampang', 'Angeles City'),
-(47, 'Jane', 'Doe', 'buyer01@gmail.com', '$KsCPDp62k', '9560585678', 'Santa Teresita', 'Angeles Cit');
 
 --
 -- Triggers `user_info`
@@ -598,7 +515,7 @@ ALTER TABLE `brands`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=214;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=220;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -628,7 +545,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `orders_info_card`
@@ -640,13 +557,13 @@ ALTER TABLE `orders_info_card`
 -- AUTO_INCREMENT for table `order_info_cod`
 --
 ALTER TABLE `order_info_cod`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1693934;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1693936;
 
 --
 -- AUTO_INCREMENT for table `order_info_gcash`
 --
 ALTER TABLE `order_info_gcash`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `order_products`
@@ -658,7 +575,7 @@ ALTER TABLE `order_products`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -670,7 +587,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `user_info`
