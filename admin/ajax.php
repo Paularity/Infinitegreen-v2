@@ -90,6 +90,11 @@ if($action == "delete_product"){
 	if($save)
 		echo $save;
 }
+if($action == "update_product_stock"){
+	$save = $crud->update_product_stock();
+	if($save)
+		echo $save;
+}
 if($action == "get_latest_bid"){
 	$save = $crud->get_latest_bid();
 	if($save)

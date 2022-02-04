@@ -304,6 +304,13 @@ Class Action {
 			return 1;
 		}
 	}
+	function update_product_stock(){
+		extract($_POST);
+		$update = $this->db->query("UPDATE products set stock='$stock' where product_id = ".$product_id);
+		if($update){
+			return 1;
+		}
+	}
 	function get_latest_bid(){
 		extract($_POST);
 		$get = $this->db->query("SELECT * FROM bids where product_id = $product_id order by bid_amount desc limit 1 ");

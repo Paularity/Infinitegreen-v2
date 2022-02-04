@@ -48,10 +48,11 @@ if(isset($_SESSION['current_gcash_source_id'])){
             $account_name = $_SESSION['fullname'];
             $account_number = $json_a["data"]["attributes"]["billing"]["phone"];
             $total_amt = (float)($_SESSION['current_product_price'])/100;
+            $products = $_SESSION['gcash_products'];
 
             $seller_id = $_SESSION['gcash_seller_id'];				
             $product_id = $_SESSION['gcash_product_id'];
-            $qty = $_SESSION['gcash_product_qty'];
+            $qty = $_SESSION['gcash_product_qty'];                        
             
             $sql = "INSERT INTO `order_info_gcash`
             (`order_id`, `user_id`, `address`, `account_name`, `account_number`, `total_amt`) 
@@ -69,6 +70,13 @@ if(isset($_SESSION['current_gcash_source_id'])){
             if(mysqli_query($con,$sql)){
                 $del_sql="DELETE from cart where user_id=$user_id";
                 if(mysqli_query($con,$del_sql)){
+
+                    // reduce stock
+                    foreach( $products as $p) {
+                        $sqlP = "UPDATE `products` SET `stock` = ".$p['stock']." WHERE `products`.`product_id` = ".$p['id'].";";
+                        mysqli_query($con,$sqlP);
+                    }
+
                     unset($_SESSION['current_gcash_source_id']);
                     unset($_SESSION['current_product_price']);
                     unset($_SESSION['current_gcash_product_description']);

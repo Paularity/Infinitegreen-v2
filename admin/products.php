@@ -27,7 +27,7 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th class="">Img</th>
-                                    <th class="">Category</th>
+                                    <th class="">Remaining Stock</th>
                                     <th class="">Product</th>
                                     <th class="">Other Info</th>
                                     <th class="text-center">Action</th>
@@ -53,14 +53,15 @@
 												<img src="<?php echo 'assets/uploads/'.$row['product_image'] ?>" alt="">
 											</div>
 										</td>
-										<td>
-											<p> <b><?php echo ucwords($row['cat_title']) ?></b></p>
+										<td class="text-center">
+											<p> <b><?php echo $row['stock'] ?></b></p>
 										</td>
 										<td class="">
 											<p><b><?php echo ucwords($row['product_title']) ?></b></p>
 										</td>
 										<td class="">
 											<p><small>Description: <b><?php echo $row['product_desc'] ?></b></small></p>
+											<p><small>Category: <b><?php echo $row['cat_title'] ?></b></small></p>
 											<p><small>Brand: <b><?php echo $row['brand_title'] ?></b></small></p>
 											<p><small>Price: <b>₱<?php echo $row['product_price'] ?></b></small></p>
 										</td>

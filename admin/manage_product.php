@@ -207,11 +207,13 @@ img#img_path-field {
                             <input type="number" class="form-control text-right" name="product_price"
                                 value="<?php echo isset($product_price) ? $product_price : 0 ?>">
                         </div>
-                        <!-- <div class="col-md-4">
-                            <label for="" class="control-label">Starting Bidding Amount</label>
-                            <input type="number" class="form-control text-right" name="start_bid"
-                                value="<?php echo isset($start_bid) ? $start_bid : 0 ?>">
-                        </div> -->
+                    </div>                   
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="" class="control-label">Stock</label>
+                            <input type="number" class="form-control text-right" name="stock"
+                                value="<?php echo isset($stock) ? $stock : 0 ?>">
+                        </div>
                     </div>                   
                     <div class=" row form-group">
                         <div class="col-md-5">

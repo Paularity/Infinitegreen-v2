@@ -178,28 +178,27 @@ span.price {
     <div class="container-fluid">
         <div class="row-checkout">
             <?php
-		$i=1;
-		$total=0;
-		$total_count=$_POST['total_count'];
+        $i=1;
+        $total=0;
+        $total_count=$_POST['total_count'];
 
-		function GUID()
-		{
-			if (function_exists('com_create_guid') === true)
-				{
-					return trim(com_create_guid(), '{}');
-				}
+        function GUID()
+        {
+            if (function_exists('com_create_guid') === true) {
+                return trim(com_create_guid(), '{}');
+            }
 
-			return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
-		}
-
-
-		if(isset($_SESSION["uid"]) && isset($_SESSION['selected_payment_method']) && $_SESSION['selected_payment_method'] == "card"){
-			unset($_SESSION['selected_payment_method']);
-			$sql = "SELECT * FROM user_info WHERE user_id='$_SESSION[uid]'";
-			$query = mysqli_query($con,$sql);
-			$row=mysqli_fetch_array($query);
-		
-		echo'
+            return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+        }
+        
+        if (isset($_SESSION['total_qty_cart']) && $_SESSION['total_qty_cart'] > 0) {
+            if (isset($_SESSION["uid"]) && isset($_SESSION['selected_payment_method']) && $_SESSION['selected_payment_method'] == "card") {
+                unset($_SESSION['selected_payment_method']);
+                $sql = "SELECT * FROM user_info WHERE user_id='$_SESSION[uid]'";
+                $query = mysqli_query($con, $sql);
+                $row=mysqli_fetch_array($query);
+        
+                echo'
 			<div class="col-75">
 				<div class="container-checkout">
 				<form id="checkout_form" action="checkout_process.php" method="POST" class="was-validated">
@@ -264,33 +263,44 @@ span.price {
 					</div>
 					</div>
 					<label><input type="CHECKBOX" name="q" class="roomselect" value="conform" required> Shipping address same as billing
-					</label>';	
-					$trx_id = GUID();	
-					$card_user_id = $_SESSION['uid'];			
-					while($i<=$total_count){
-						$item_name_ = $_POST['item_name_'.$i];
-						$amount_ = $_POST['amount_'.$i];
-						$quantity_ = $_POST['quantity_'.$i];
-						$total=$total+$amount_ ;
-						$sql = "SELECT product_id, seller_id FROM products WHERE product_title='$item_name_'";
-						$query = mysqli_query($con,$sql);
-						$row=mysqli_fetch_array($query);
-						$product_id=$row["product_id"];
-						$seller_id=$row["seller_id"];
-						echo "	
+					</label>';
+                $trx_id = GUID();
+                $id_stock_card = array();
+                $card_user_id = $_SESSION['uid'];
+                while ($i<=$total_count) {
+                    $item_name_ = $_POST['item_name_'.$i];
+                    $amount_ = $_POST['amount_'.$i];
+                    $quantity_ = $_POST['quantity_'.$i];
+                    $total=$total+$amount_ ;
+                    $sql = "SELECT product_id, seller_id,stock FROM products WHERE product_title='$item_name_'";
+                    $query = mysqli_query($con, $sql);
+                    $row=mysqli_fetch_array($query);
+                    $product_id=$row["product_id"];
+                    $seller_id=$row["seller_id"];
+
+                    $newStock = $row["stock"] - $_POST['quantity_'.$i];
+                    array_push($id_stock_card, array( "id"=>$row["product_id"], "stock"=>$newStock ));
+                
+                    echo "	
 						<input type='hidden' name='prod_id_$i' value='$product_id'>
 						<input type='hidden' name='prod_price_$i' value='$amount_'>
 						<input type='hidden' name='prod_qty_$i' value='$quantity_'>
 						";
 
-						$sqlOrders = "INSERT INTO `orders`
+                    $sqlOrders = "INSERT INTO `orders`
 							(`product_id`, `seller_id`, `user_id`, `qty`, `trx_id`, `p_status`, `p_type`) 
 							VALUES ('$product_id', '$seller_id', '$card_user_id', '$quantity_', '$trx_id', 'Pending', 'card')";
-							mysqli_query($con,$sqlOrders);
-						$i++;
-					}					
-					
-				echo'	
+                    if (mysqli_query($con, $sqlOrders)) {
+                        // reduce stock
+                        foreach ($id_stock_card as $p) {
+                            $sqlP = "UPDATE `products` SET `stock` = ".$p['stock']." WHERE `products`.`product_id` = ".$p['id'].";";
+                            mysqli_query($con, $sqlP);
+                        }
+                    }
+                    $i++;
+                }
+                    
+                echo'	
 				<input type="hidden" name="total_count" value="'.$total_count.'">
 					<input type="hidden" name="total_price" value="'.$total.'">
 					
@@ -299,34 +309,35 @@ span.price {
 				</div>
 			</div>
 			';
-		}
-		
-		else if(isset($_SESSION['selected_payment_method']) && $_SESSION['selected_payment_method'] == "gcash"){
-			unset($_SESSION['selected_payment_method']);			
-    // $data = array('key1' => 'value1', 'key2' => 'value2');
-			while($i<=$total_count){
-				$item_name_ = $_POST['item_name_'.$i];
-				$amount_ = $_POST['amount_'.$i];
-				$quantity_ = $_POST['quantity_'.$i];
-				$total=$total+$amount_ ;
-				$sql = "SELECT product_id, seller_id FROM products WHERE product_title='$item_name_'";
-				$query = mysqli_query($con,$sql);
-				$row=mysqli_fetch_array($query);
-				$product_id=$row["product_id"];
-				echo "	
+            } elseif (isset($_SESSION['selected_payment_method']) && $_SESSION['selected_payment_method'] == "gcash") {
+                unset($_SESSION['selected_payment_method']);
+                $id_stock = array();
+                while ($i<=$total_count) {
+                    $item_name_ = $_POST['item_name_'.$i];
+                    $amount_ = $_POST['amount_'.$i];
+                    $quantity_ = $_POST['quantity_'.$i];
+                    $total=$total+$amount_ ;
+                    $sql = "SELECT product_id, seller_id, stock FROM products WHERE product_title='$item_name_'";
+                    $query = mysqli_query($con, $sql);
+                    $row=mysqli_fetch_array($query);
+                    $product_id=$row["product_id"];
+                
+                    $newStock = $row["stock"] - $_POST['quantity_'.$i];
+                    array_push($id_stock, array( "id"=>$row["product_id"], "stock"=>$newStock ));
+
+                    echo "	
 				<input type='hidden' name='prod_id_$i' value='$product_id'>
 				<input type='hidden' name='prod_price_$i' value='$amount_'>
 				<input type='hidden' name='prod_qty_$i' value='$quantity_'>
 				";
 
-				$_SESSION['gcash_seller_id'] = $row['seller_id'];				
-				$_SESSION['gcash_product_id'] = $row['product_id'];
-				$_SESSION['gcash_product_qty'] = $quantity_;
-				
-				$i++;				
-			}	
-				
-			?>
+                    $_SESSION['gcash_seller_id'] = $row['seller_id'];
+                    $_SESSION['gcash_product_id'] = $row['product_id'];
+                    $_SESSION['gcash_product_qty'] = $quantity_;
+                    $_SESSION['gcash_products'] = $id_stock;
+                
+                    $i++;
+                } ?>			
             <div class="col-75">
                 <div class="container-checkout">
                     <div class="gcash-container">
@@ -349,78 +360,93 @@ span.price {
                 </div>
             </div>
             <?php
-		}
-		else if(isset($_SESSION['selected_payment_method']) &&  $_SESSION['selected_payment_method'] == "cod"){
-			unset($_SESSION['selected_payment_method']);
-			$trx_id = GUID();
-			while($i<=$total_count){
-				$item_name_ = $_POST['item_name_'.$i];
-				$amount_ = $_POST['amount_'.$i];
-				$quantity_ = $_POST['quantity_'.$i];
-				$total=$total+$amount_ ;
-				$sql = "SELECT product_id, seller_id FROM products WHERE product_title='$item_name_'";
-				$query = mysqli_query($con,$sql);
-				$row=mysqli_fetch_array($query);
-				$product_id=$row["product_id"];
-				$seller_id=$row["seller_id"];
-				echo "	
+            } elseif (isset($_SESSION['selected_payment_method']) &&  $_SESSION['selected_payment_method'] == "cod") {
+                unset($_SESSION['selected_payment_method']);
+                $id_stock_cod = array();
+                $trx_id = GUID();
+                while ($i<=$total_count) {
+                    $item_name_ = $_POST['item_name_'.$i];
+                    $amount_ = $_POST['amount_'.$i];
+                    $quantity_ = $_POST['quantity_'.$i];
+                    $total=$total+$amount_ ;
+                    $sql = "SELECT product_id, seller_id, stock FROM products WHERE product_title='$item_name_'";
+                    $query = mysqli_query($con, $sql);
+                    $row=mysqli_fetch_array($query);
+                    $product_id=$row["product_id"];
+                    $seller_id=$row["seller_id"];
+
+                    $newStock = $row["stock"] - $_POST['quantity_'.$i];
+                    array_push($id_stock_cod, array( "id"=>$row["product_id"], "stock"=>$newStock ));
+
+                    echo "	
 				<input type='hidden' name='prod_id_$i' value='$product_id'>
 				<input type='hidden' name='prod_price_$i' value='$amount_'>
 				<input type='hidden' name='prod_qty_$i' value='$quantity_'>
 				";
 
-				$cod_user_id = $_SESSION['uid'];
-				$p_status = "Pending";				
+                    $cod_user_id = $_SESSION['uid'];
+                    $p_status = "Pending";
 
-				$sqlOrders = "INSERT INTO `orders`
+                    $sqlOrders = "INSERT INTO `orders`
 					(`product_id`, `seller_id`, `user_id`, `qty`, `trx_id`, `p_status`, `p_type`) 
 					VALUES ('$product_id', '$seller_id', '$cod_user_id', '$quantity_', '$trx_id', '$p_status', 'cod')";
-				mysqli_query($con,$sqlOrders);
+                    if (mysqli_query($con, $sqlOrders)) {
+                        // reduce stock
+                        foreach ($id_stock_cod as $p) {
+                            $sqlP = "UPDATE `products` SET `stock` = ".$p['stock']." WHERE `products`.`product_id` = ".$p['id'].";";
+                            mysqli_query($con, $sqlP);
+                        }
+                    }
 
-				$i++;
-			}	
-            $user_id = $_SESSION['uid'];
-            $address = $_SESSION['address'];
-            $account_name = $_SESSION['fullname'];
-			$p_status = "Pending";
+                    $i++;
+                }
+                $user_id = $_SESSION['uid'];
+                $address = $_SESSION['address'];
+                $account_name = $_SESSION['fullname'];
+                $p_status = "Pending";
 
-            $sql = "INSERT INTO `order_info_cod`
+                $sql = "INSERT INTO `order_info_cod`
             (`order_id`, `user_id`, `address`, `total_amt`, `trx_id`) 
-            VALUES ('$trx_id', '$user_id', '$address', '$total', '$trx_id')";            
+            VALUES ('$trx_id', '$user_id', '$address', '$total', '$trx_id')";
 
-			if(mysqli_query($con,$sql)){
-				$del_sql="DELETE from cart where user_id=$user_id";
-                if(mysqli_query($con,$del_sql)){
-                    $_SESSION['cod_success'] = 1;
-					echo "<script> location.href='success-payment.php'; </script>";
-                }else{
-                    echo(mysqli_error($con));
-                }				
-			}	
-		}
-
-		else{			
-			?>
+                if (mysqli_query($con, $sql)) {
+                    $del_sql="DELETE from cart where user_id=$user_id";
+                    if (mysqli_query($con, $del_sql)) {
+                        $_SESSION['cod_success'] = 1;
+                        echo "<script> location.href='success-payment.php'; </script>";
+                    } else {
+                        echo(mysqli_error($con));
+                    }
+                }
+            } else {
+                ?>
             <script>
             alert('Please select payment method!')
             window.location.href = 'cart.php'
             </script>
             <?php
-		}
-		?>
+            }
+        } else {
+            ?>
+            <script>
+            alert('Please add quantity more than 0 from your cart.')
+            window.location.href = 'cart.php'
+            </script>
+            <?php
+        }
+        ?>
 
             <div class="col-25">
                 <div class="container-checkout">
 
                     <?php
-				if (isset($_POST["cmd"])) {
-				
-					$user_id = $_POST['custom'];
-					
-					
-					$i=1;
-					echo
-					"
+                if (isset($_POST["cmd"])) {
+                    $user_id = $_POST['custom'];
+                    
+                    
+                    $i=1;
+                    echo
+                    "
 					<h4>Cart 
 					<span class='price' style='color:black'>
 					<i class='fa fa-shopping-cart'></i> 
@@ -437,38 +463,37 @@ span.price {
 					</thead>
 					<tbody>
 					";
-					$total=0;
-					while($i<=$total_count){
-						$item_name_ = $_POST['item_name_'.$i];
-						
-						$item_number_ = $_POST['item_number_'.$i];
-						
-						$amount_ = $_POST['amount_'.$i];
-						
-						$quantity_ = $_POST['quantity_'.$i];
-						$total=$total+$amount_ ;
-						$sql = "SELECT product_id FROM products WHERE product_title='$item_name_'";
-						$query = mysqli_query($con,$sql);
-						$row=mysqli_fetch_array($query);
-						$product_id=$row["product_id"];
-					
-						echo "	
+                    $total=0;
+                    while ($i<=$total_count) {
+                        $item_name_ = $_POST['item_name_'.$i];
+                        
+                        $item_number_ = $_POST['item_number_'.$i];
+                        
+                        $amount_ = $_POST['amount_'.$i];
+                        
+                        $quantity_ = $_POST['quantity_'.$i];
+                        $total=$total+$amount_ ;
+                        $sql = "SELECT product_id FROM products WHERE product_title='$item_name_'";
+                        $query = mysqli_query($con, $sql);
+                        $row=mysqli_fetch_array($query);
+                        $product_id=$row["product_id"];
+                    
+                        echo "	
 
 						<tr><td><p>$item_number_</p></td><td><p>$item_name_</p></td><td ><p>$quantity_</p></td><td ><p>$amount_</p></td></tr>";
-						
-						$i++;
-					}
+                        
+                        $i++;
+                    }
 
-				echo"
+                    echo"
 
 				</tbody>
 				</table>
 				<hr>
 				
 				<h3>total<span class='price' style='color:black'><b>₱".$total * $quantity_ ."</b></span></h3>";
-					
-				}
-				?>
+                }
+                ?>
                 </div>
             </div>
         </div>
