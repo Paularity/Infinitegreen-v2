@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2022 at 02:58 PM
+-- Generation Time: Feb 15, 2022 at 04:15 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.27
 
@@ -83,13 +83,6 @@ CREATE TABLE `cart` (
   `user_id` int(10) DEFAULT NULL,
   `qty` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `p_id`, `ip_add`, `user_id`, `qty`) VALUES
-(232, 111, '::1', 50, 111);
 
 -- --------------------------------------------------------
 
@@ -189,7 +182,8 @@ INSERT INTO `orders` (`order_id`, `seller_id`, `user_id`, `product_id`, `qty`, `
 (57, 27, 50, 111, 1, 'E2BB9488-C48B-43BD-B634-F27F274D93EE', 'Pending', 'card', '2022-02-04 21:22:24'),
 (58, 27, 50, 111, 1, 'DC17EAFA-3E7F-469E-A51A-1D080BF8F770', 'Pending', 'card', '2022-02-04 21:22:48'),
 (59, 27, 50, 111, 1, 'EB28F3E0-9633-49B4-9CC0-DE85CF254455', 'Pending', 'card', '2022-02-04 21:23:05'),
-(60, 27, 50, 111, 1, '8333CF1C-7BD4-4F85-B31E-C3347287A408', 'Pending', 'cod', '2022-02-04 21:28:55');
+(60, 27, 50, 111, 1, '8333CF1C-7BD4-4F85-B31E-C3347287A408', 'Pending', 'cod', '2022-02-04 21:28:55'),
+(61, 27, 50, 111, 111, '990BAE99-155B-4A32-A63B-02A49C28FC3C', 'Pending', 'cod', '2022-02-13 17:45:16');
 
 -- --------------------------------------------------------
 
@@ -244,6 +238,7 @@ CREATE TABLE `order_info_cod` (
 INSERT INTO `order_info_cod` (`order_id`, `user_id`, `address`, `total_amt`, `trx_id`) VALUES
 (30, 50, 'Santa Teresita, Angeles City', 10000, '30DCC778-0B7E-4E1D-BCFE-785F4DE7E3CA'),
 (450, 50, 'Santa Teresita, Angeles City', 10000, '450F6975-6E11-4531-BA76-6CF980E20AC2'),
+(990, 50, 'Santa Teresita, Angeles City', 10000, '990BAE99-155B-4A32-A63B-02A49C28FC3C'),
 (8333, 50, 'Santa Teresita, Angeles City', 10000, '8333CF1C-7BD4-4F85-B31E-C3347287A408'),
 (1693936, 50, 'Santa Teresita, Angeles City', 10000, 'D464AA58-571D-4BD4-AEE6-253DE0316CE9'),
 (1693937, 50, 'Santa Teresita, Angeles City', 10000, 'A4711021-97C0-4EC7-B4F2-170EC34DED8A');
@@ -321,7 +316,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `seller_id`, `product_cat`, `product_brand`, `product_title`, `product_price`, `stock`, `product_desc`, `product_image`, `product_keywords`) VALUES
-(111, 27, 1, 8, 'Malunggay[ EXCLUSIVE OFFER ]', 10000, 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ', '111.jpg', '');
+(111, 27, 1, 8, 'Malunggay[ EXCLUSIVE OFFER ]', 10000, 0, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ', '111.jpg', ''),
+(112, 28, 1, 8, 'Johns Guyabano', 10, 10, 'a ad asd ', '112.jpg', '');
 
 -- --------------------------------------------------------
 
@@ -369,7 +365,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `email`, `contact`, `address`, `type`, `date_created`) VALUES
 (1, 'Administrator', 'admin', '0192023a7bbd73250516f069df18b500', 'admin@admin.com', '+123456789', '', 1, '2020-10-27 09:19:59'),
-(27, 'Jane Done', 'jane01', 'aa64b63697ecfff47a09f676562b6d3f', 'jane01@gmail.com', '09560586578', 'Angeles City, Pampanga', 2, '2022-02-01 19:51:33');
+(27, 'Jane Done', 'jane01', 'aa64b63697ecfff47a09f676562b6d3f', 'jane01@gmail.com', '09560586578', 'Angeles City, Pampanga', 2, '2022-02-01 19:51:33'),
+(28, 'John Doe', 'john01', 'bc9ac58d5b7a73808fb5dea595f50bdd', 'johndoe@gmail.com', '09560585678', 'Santa Teresita', 2, '2022-02-15 18:00:28');
 
 -- --------------------------------------------------------
 
@@ -625,7 +622,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `orders_info_card`
@@ -655,7 +652,7 @@ ALTER TABLE `order_products`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -667,7 +664,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user_info`
