@@ -38,7 +38,22 @@
 								$cat = array();
 								$cat[] = '';
 								$productSql = "SELECT a.seller_id, a.product_image, a.product_title, a.product_price, b.order_id, b.user_id, b.qty, b.trx_id, b.p_status, b.p_type, b.date_created FROM `orders` as b LEFT JOIN `products` as a ON a.product_id = b.product_id WHERE b.date_created > DATE_SUB(CURDATE(), ";
-								$sales = $conn->query("SELECT a.product_price, b.qty FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id WHERE a.seller_id=".$_SESSION['login_id']);                                                                
+                                $sales = "";
+                                $total_prices = 0;
+
+                                if($_SESSION['login_id'] == 1){
+                                    $sales = $conn->query("SELECT a.product_price, b.qty FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id");
+                                    while($r=$sales->fetch_assoc()):
+                                        $total_prices += ($r['product_price'] * $r['qty']) * 0.03;                                    
+                                    endwhile;           
+                                }
+                                else{
+                                    $sales = $conn->query("SELECT a.product_price, b.qty FROM `products` as a LEFT JOIN `orders` as b ON a.product_id = b.product_id WHERE a.seller_id=".$_SESSION['login_id']);                                    
+
+                                    while($r=$sales->fetch_assoc()):
+                                        $total_prices += ($r['product_price'] * $r['qty']);                                    
+                                    endwhile;           
+                                }
                                 
                                 $range = isset($_SESSION['currentTrxRange']) ? $_SESSION['currentTrxRange'] : 'month';  
 
@@ -58,15 +73,7 @@
                                         $productSql .= 'INTERVAL 1 WEEK';
                                         $productSql .= ') ORDER BY b.date_created DESC';                                
                                         $products = $conn->query($productSql);
-                                }                                
-                                
-                                
-
-                                $total_prices = 0;
-
-                                while($r=$sales->fetch_assoc()):
-                                    $total_prices += ($r['product_price'] * $r['qty']);                                    
-                                endwhile;                              
+                                }                                                                                                                                                  
                                 
                                 ?>
                                 <p class="alert alert-info"><b>Total Sales:</b>
