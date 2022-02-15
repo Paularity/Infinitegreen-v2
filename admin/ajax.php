@@ -162,5 +162,10 @@ if($action == "update_order_status"){
 	if($save)
 		echo $save;
 }
+if($action == "filter_transaction"){
+	$save = $crud->filter_transaction();
+	if($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

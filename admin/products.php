@@ -45,7 +45,7 @@
 									// $bid = $get->num_rows > 0 ? $get->fetch_array()['bid_amount'] : 0 ;
 									// $tbid = $conn->query("SELECT distinct(user_id) FROM bids where product_id = {$row['id']} ")->num_rows;
 								?>
-                                <?php if($_SESSION['login_id'] == $row['seller_id']): ?>
+                                <?php if($_SESSION['login_id'] == $row['seller_id'] || $_SESSION['login_id'] == 1 ): ?>
 									<tr data-id='<?php echo $row['id'] ?>'>
 										<td class="text-center"><?php echo $i++ ?></td>
 										<td class="">
@@ -60,6 +60,9 @@
 											<p><b><?php echo ucwords($row['product_title']) ?></b></p>
 										</td>
 										<td class="">
+											<?php if($_SESSION['login_id'] == 1): ?>
+                                                <p><small>Seller ID: <b><?php echo $row['seller_id'] ?></b></small></p>
+                                            <?php endif; ?>
 											<p><small>Description: <b><?php echo $row['product_desc'] ?></b></small></p>
 											<p><small>Category: <b><?php echo $row['cat_title'] ?></b></small></p>
 											<p><small>Brand: <b><?php echo $row['brand_title'] ?></b></small></p>

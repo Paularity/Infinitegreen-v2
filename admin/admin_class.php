@@ -453,4 +453,17 @@ Class Action {
 		if($save)
 			return 1;
 	}
+
+	function filter_transaction() {
+		extract($_POST);
+		if(isset($range)){
+			$_SESSION['currentTrxRange'] = $range;
+			return 1;
+		}
+
+		//default
+		$_SESSION['currentTrxRange'] = 'week';
+
+		return 2;
+	}
 }
